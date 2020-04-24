@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Pizza.MainPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    BackgroundColor="{StaticResource Background}"
+    mc:Ignorable="d">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Background">#151E34</Color>
+            <Color x:Key="ButtonColor">#FBC96D</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="80" />
+        </Grid.RowDefinitions>
+
+        <BoxView
+            Grid.Row="1"
+            Margin="20,10"
+            BackgroundColor="White"
+            CornerRadius="30"
+            HeightRequest="60"
+            HorizontalOptions="Fill"
+            VerticalOptions="Center" />
+
+
+        <AbsoluteLayout>
+
+            <Image
+                x:Name="Pizza"
+                AbsoluteLayout.LayoutBounds="0,0,100,100"
+                AbsoluteLayout.LayoutFlags="None"
+                Source="Pizza">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Pizza_Tapped" />
+                </Image.GestureRecognizers>
+            </Image>
+
+            <Image
+                x:Name="FlyingPizza"
+                AbsoluteLayout.LayoutBounds="0,0,100,100"
+                AbsoluteLayout.LayoutFlags="None"
+                IsVisible="False"
+                Source="Pizza" />
+
+            <Label
+                x:Name="SizeLabel"
+                AbsoluteLayout.LayoutBounds="0,0,100,100"
+                AbsoluteLayout.LayoutFlags="None"
+                HorizontalOptions="Fill"
+                HorizontalTextAlignment="Center"
+                Text="Small"
+                TextColor="White"
+                VerticalOptions="Start" />
+
+        </AbsoluteLayout>
+
+
+        <Button
+            x:Name="AddToCartButton"
+            Grid.Row="1"
+            Margin="20,10"
+            BackgroundColor="{StaticResource ButtonColor}"
+            Clicked="Button_Clicked"
+            CornerRadius="30"
+            HeightRequest="60"
+            HorizontalOptions="Fill"
+            Text="Add to Cart"
+            VerticalOptions="Center" />
+
+
+    </Grid>
+
+</ContentPage>
