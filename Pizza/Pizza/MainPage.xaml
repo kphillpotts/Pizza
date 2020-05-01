@@ -3,6 +3,7 @@
     x:Class="Pizza.MainPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Pizza.Controls"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     BackgroundColor="{StaticResource Background}"
@@ -11,7 +12,50 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <Color x:Key="Background">#151E34</Color>
-            <Color x:Key="ButtonColor">#FBC96D</Color>
+            <Color x:Key="AccentColor">#FBC96D</Color>
+            <Color x:Key="PillColor">Gray</Color>
+            <Color x:Key="PillTextColor">White</Color>
+            <Color x:Key="BodyTextColor">White</Color>
+
+            <Style x:Key="QuantityButton" TargetType="Button">
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="BorderColor" Value="{StaticResource PillTextColor}" />
+                <Setter Property="BorderWidth" Value="1" />
+                <Setter Property="CornerRadius" Value="15" />
+                <Setter Property="TextColor" Value="{StaticResource PillTextColor}" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="HeightRequest" Value="30" />
+                <Setter Property="WidthRequest" Value="30" />
+            </Style>
+
+            <Style x:Key="PillFrame" TargetType="Frame">
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="BackgroundColor" Value="{StaticResource PillColor}" />
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="HasShadow" Value="False" />
+                <Setter Property="HeightRequest" Value="20" />
+            </Style>
+
+            <Style x:Key="PillText" TargetType="Label">
+                <Setter Property="Margin" Value="10,0" />
+                <Setter Property="TextColor" Value="{StaticResource PillTextColor}" />
+            </Style>
+
+            <Style x:Key="PriceText" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource AccentColor}" />
+            </Style>
+
+            <Style x:Key="DescriptionText" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource BodyTextColor}" />
+            </Style>
+
+            <Style x:Key="QuantityStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource AccentColor}" />
+                <Setter Property="FontFamily" Value="SemiBold" />
+                <Setter Property="FontSize" Value="24" />
+            </Style>
+
+
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -33,7 +77,6 @@
 
 
         <AbsoluteLayout>
-
             <Image
                 x:Name="Pizza"
                 AbsoluteLayout.LayoutBounds="0,0,100,100"
@@ -55,6 +98,7 @@
                 x:Name="SizeLabel"
                 AbsoluteLayout.LayoutBounds="0,0,100,100"
                 AbsoluteLayout.LayoutFlags="None"
+                FontFamily="Regular"
                 HorizontalOptions="Fill"
                 HorizontalTextAlignment="Center"
                 Text="Small"
@@ -63,12 +107,110 @@
 
         </AbsoluteLayout>
 
+        <Label
+            x:Name="PizzaTitle"
+            Margin="20"
+            AbsoluteLayout.LayoutBounds="0,0,0,0"
+            AbsoluteLayout.LayoutFlags="None"
+            FontFamily="Regular"
+            FontSize="30"
+            InputTransparent="True"
+            Text="Pizza Margherita"
+            TextColor="White"
+            VerticalOptions="Start" />
+
+
+        <StackLayout
+            x:Name="PizzaDescription"
+            Margin="20,0"
+            IsVisible="False"
+            Spacing="20"
+            VerticalOptions="End">
+            <StackLayout Orientation="Horizontal">
+                <controls:PillLabel
+                    FrameStyle="{StaticResource PillFrame}"
+                    LabelStyle="{StaticResource PillText}"
+                    Text="Tomato" />
+                <controls:PillLabel
+                    FrameStyle="{StaticResource PillFrame}"
+                    LabelStyle="{StaticResource PillText}"
+                    Text="Basil" />
+                <controls:PillLabel
+                    FrameStyle="{StaticResource PillFrame}"
+                    LabelStyle="{StaticResource PillText}"
+                    Text="Cheese" />
+            </StackLayout>
+
+            <Label Style="{StaticResource PriceText}" Text="$13.99" />
+
+            <Label Style="{StaticResource DescriptionText}" Text="I'm baby tumblr succulents edison bulb bushwick flexitarian whatever banjo kogi distillery slow-carb actually viral poutine semiotics. Biodiesel YOLO flannel umami. " />
+        </StackLayout>
+
+        <Grid
+            x:Name="QuantitySelect"
+            Margin="20,30"
+            ColumnSpacing="40"
+            VerticalOptions="End">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Label
+                FontSize="18"
+                Style="{StaticResource DescriptionText}"
+                Text="Quantity"
+                VerticalOptions="Center" />
+
+            <Frame
+                Grid.Column="1"
+                Padding="0"
+                BackgroundColor="Transparent"
+                BorderColor="White"
+                CornerRadius="25"
+                HasShadow="False"
+                HeightRequest="50"
+                HorizontalOptions="Fill"
+                VerticalOptions="Center" />
+            <Button
+                x:Name="DecreaseButton"
+                Grid.Column="1"
+                Margin="10,0,0,0"
+                Clicked="DecreaseButton_Clicked"
+                HorizontalOptions="Start"
+                Style="{StaticResource QuantityButton}"
+                Text="-"
+                VerticalOptions="Center" />
+            <Button
+                x:Name="IncreaseButton"
+                Grid.Column="1"
+                Margin="0,0,10,0"
+                Clicked="IncreaseButton_Clicked"
+                HorizontalOptions="End"
+                Style="{StaticResource QuantityButton}"
+                Text="+"
+                VerticalOptions="Center" />
+
+            <controls:FerrisLabel
+                x:Name="QuantityLabel"
+                Grid.Column="1"
+                HorizontalOptions="Center"
+                TextStyle="{StaticResource QuantityStyle}"
+                VerticalOptions="Center" />
+
+
+
+
+
+
+
+        </Grid>
 
         <Button
             x:Name="AddToCartButton"
             Grid.Row="1"
             Margin="20,10"
-            BackgroundColor="{StaticResource ButtonColor}"
+            BackgroundColor="{StaticResource AccentColor}"
             Clicked="Button_Clicked"
             CornerRadius="30"
             HeightRequest="60"

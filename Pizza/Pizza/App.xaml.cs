@@ -2,6 +2,8 @@
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+[assembly: ExportFont("OpenSans-Regular.ttf", Alias = "Regular")]
+[assembly: ExportFont("OpenSans-SemiBold.ttf", Alias = "SemiBold")]
 namespace Pizza
 {
     public partial class App : Application

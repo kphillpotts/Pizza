@@ -24,6 +24,12 @@ namespace Pizza
         {
             this.SizeChanged += MainPage_SizeChanged;
             base.OnAppearing();
+            
+            if (animState != null)
+            {
+                animState.Go(State.Start, false);
+                animState.Go(State.Entrance, true);
+            }
         }
 
         enum State
@@ -38,6 +44,9 @@ namespace Pizza
 
         private void MainPage_SizeChanged(object sender, EventArgs e)
         {
+            if (animState != null)
+                return;
+
             // calculate our size for our images
             var imageSize = Width * 1.5;
 
@@ -51,12 +60,20 @@ namespace Pizza
 
             animState = new AnimationStateMachine();
 
+            var headerTranslationY = PizzaDescription.Bounds.Top - 
+                (PizzaTitle.Bounds.Height + PizzaTitle.Bounds.Top + 20);
+
+
             // starting 
             animState.Add(State.Start, new ViewTransition[]
             {
                 new ViewTransition(Pizza, AnimationType.Layout, startRect),
                 new ViewTransition(Pizza, AnimationType.Rotation, 0),
-                new ViewTransition(SizeLabel, AnimationType.Opacity, 0, 0)
+                new ViewTransition(SizeLabel, AnimationType.Opacity, 0, 0),
+                new ViewTransition(PizzaDescription, AnimationType.Opacity, 1),
+                new ViewTransition(PizzaDescription, AnimationType.TranslationY, 0),
+                new ViewTransition(PizzaTitle, AnimationType.TranslationY, headerTranslationY),
+                new ViewTransition(QuantitySelect, AnimationType.Opacity, 0)
             }) ;
 
             // entrance 
@@ -67,7 +84,11 @@ namespace Pizza
             {
                 new ViewTransition(Pizza, AnimationType.Layout, entranceRect),
                 new ViewTransition(Pizza, AnimationType.Rotation, 20),
-                new ViewTransition(SizeLabel, AnimationType.Opacity, 0, 0)
+                new ViewTransition(SizeLabel, AnimationType.Opacity, 0, 0),
+                new ViewTransition(PizzaDescription, AnimationType.Opacity, 1),
+                new ViewTransition(PizzaDescription, AnimationType.TranslationY, 0),
+                new ViewTransition(PizzaTitle, AnimationType.TranslationY, headerTranslationY),
+                new ViewTransition(QuantitySelect, AnimationType.Opacity, 0)
             });
 
             // small 
@@ -84,7 +105,12 @@ namespace Pizza
                 new ViewTransition(FlyingPizza, AnimationType.Layout, smallRect),
                 new ViewTransition(FlyingPizza, AnimationType.Rotation, 45),
                 new ViewTransition(SizeLabel, AnimationType.Opacity, 1, 0),
-                new ViewTransition(SizeLabel, AnimationType.Layout, smallLabelRect)
+                new ViewTransition(SizeLabel, AnimationType.Layout, smallLabelRect),
+                new ViewTransition(PizzaDescription, AnimationType.Opacity, 0),
+                new ViewTransition(PizzaDescription, AnimationType.TranslationY, 300),
+                new ViewTransition(PizzaTitle, AnimationType.TranslationY, 0),
+                new ViewTransition(QuantitySelect, AnimationType.Opacity, 1)
+
             }); ;
 
             // medium 
@@ -98,8 +124,11 @@ namespace Pizza
                 new ViewTransition(FlyingPizza, AnimationType.Layout, mediumRect),
                 new ViewTransition(FlyingPizza, AnimationType.Rotation, 90),
                 new ViewTransition(SizeLabel, AnimationType.Opacity, 1, 0),
-                new ViewTransition(SizeLabel, AnimationType.Layout, mediumLabelRect)
-
+                new ViewTransition(SizeLabel, AnimationType.Layout, mediumLabelRect),
+                new ViewTransition(PizzaDescription, AnimationType.Opacity, 0),
+                new ViewTransition(PizzaDescription, AnimationType.TranslationY, 300),
+                new ViewTransition(PizzaTitle, AnimationType.TranslationY, 0),
+                new ViewTransition(QuantitySelect, AnimationType.Opacity, 1)
             });
 
             // large 
@@ -113,7 +142,11 @@ namespace Pizza
                 new ViewTransition(FlyingPizza, AnimationType.Layout, largeRect),
                 new ViewTransition(FlyingPizza, AnimationType.Rotation, 135),
                 new ViewTransition(SizeLabel, AnimationType.Opacity, 1, 0),
-                new ViewTransition(SizeLabel, AnimationType.Layout, largeLabelRect)
+                new ViewTransition(SizeLabel, AnimationType.Layout, largeLabelRect),
+                new ViewTransition(PizzaDescription, AnimationType.Opacity, 0),
+                new ViewTransition(PizzaDescription, AnimationType.TranslationY, 300),
+                new ViewTransition(PizzaTitle, AnimationType.TranslationY, 0),
+                new ViewTransition(QuantitySelect, AnimationType.Opacity, 1)
             });
 
 
@@ -175,6 +208,24 @@ namespace Pizza
             await AddToCartButton.LayoutTo(buttonBounds, 500, Easing.SinInOut);
             
             FlyingPizza.IsVisible = false;
+
+        }
+
+        int currentQuantity = 1;
+
+        private void DecreaseButton_Clicked(object sender, EventArgs e)
+        {
+            currentQuantity--;
+            QuantityLabel.AnimationOffset = new Point(0, -20);
+            QuantityLabel.Text = currentQuantity.ToString();
+
+        }
+
+        private void IncreaseButton_Clicked(object sender, EventArgs e)
+        {
+            currentQuantity++;
+            QuantityLabel.AnimationOffset = new Point(0, 20);
+            QuantityLabel.Text = currentQuantity.ToString();
 
         }
     }
