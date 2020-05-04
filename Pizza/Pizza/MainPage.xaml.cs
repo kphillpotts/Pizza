@@ -19,14 +19,29 @@ namespace Pizza
         public MainPage()
         {
             InitializeComponent();
+            this.SizeChanged += MainPage_SizeChanged;
         }
+
+        bool hasSizeBeenCalculated = false;
+
+        private void MainPage_SizeChanged(object sender, EventArgs e)
+        {
+            SetupAnimationStates();
+            hasSizeBeenCalculated = true;
+            animState.Go(State.Start, false);
+            animState.Go(State.Entrance, true);
+        }
+
+ 
+
         protected override void OnAppearing()
         {
-            this.SizeChanged += MainPage_SizeChanged;
             base.OnAppearing();
-            
-            if (animState != null)
+            if (hasSizeBeenCalculated)
             {
+                // need to resetup animations here. 
+                // because the animation helper has weak references
+                SetupAnimationStates();
                 animState.Go(State.Start, false);
                 animState.Go(State.Entrance, true);
             }
@@ -41,42 +56,36 @@ namespace Pizza
             Large
         }
 
-
-        private void MainPage_SizeChanged(object sender, EventArgs e)
+        private void SetupAnimationStates()
         {
-            if (animState != null)
-                return;
-
             // calculate our size for our images
             var imageSize = Width * 1.5;
 
+            // work out the position of the starting pizza
             var left = (imageSize - Width) / 2;
             var top = imageSize * .5;
+            var startRect = new Rectangle(-left, -top, imageSize, imageSize);
 
-            var startRect = new Rectangle(0, 0, imageSize, imageSize);
-            startRect.Location = new Point(-left, -top);
-
-            AbsoluteLayout.SetLayoutBounds(Pizza, startRect);
-
-            animState = new AnimationStateMachine();
-
-            var headerTranslationY = PizzaDescription.Bounds.Top - 
+            var headerTranslationY = PizzaDescription.Bounds.Top -
                 (PizzaTitle.Bounds.Height + PizzaTitle.Bounds.Top + 20);
 
+            animState = new AnimationStateMachine();
 
             // starting 
             animState.Add(State.Start, new ViewTransition[]
             {
                 new ViewTransition(Pizza, AnimationType.Layout, startRect),
                 new ViewTransition(Pizza, AnimationType.Rotation, 0),
+                new ViewTransition(FlyingPizza, AnimationType.Layout, startRect),
+                new ViewTransition(FlyingPizza, AnimationType.Rotation, 0),
                 new ViewTransition(SizeLabel, AnimationType.Opacity, 0, 0),
                 new ViewTransition(PizzaDescription, AnimationType.Opacity, 1),
                 new ViewTransition(PizzaDescription, AnimationType.TranslationY, 0),
                 new ViewTransition(PizzaTitle, AnimationType.TranslationY, headerTranslationY),
                 new ViewTransition(QuantitySelect, AnimationType.Opacity, 0)
-            }) ;
+            });
 
-            // entrance 
+            // entrance pizza position is calculated 
             var entranceRect = startRect;
             entranceRect.Location = new Point(-left, -top + 50);
 
@@ -95,7 +104,7 @@ namespace Pizza
             var yPos = Height * 0.4;
 
             var pizzaImageSize = Width * .5;
-            var smallRect = new Rectangle(20, yPos - (pizzaImageSize/2), pizzaImageSize, pizzaImageSize);
+            var smallRect = new Rectangle(20, yPos - (pizzaImageSize / 2), pizzaImageSize, pizzaImageSize);
             var smallLabelRect = new Rectangle(smallRect.Left, smallRect.Bottom + 20, pizzaImageSize, SizeLabel.Height);
 
             animState.Add(State.Small, new ViewTransition[]
@@ -148,13 +157,8 @@ namespace Pizza
                 new ViewTransition(PizzaTitle, AnimationType.TranslationY, 0),
                 new ViewTransition(QuantitySelect, AnimationType.Opacity, 1)
             });
-
-
-            // go to our starting state
-            animState.Go(State.Start, false);
-            animState.Go(State.Entrance);
         }
-        
+
         private void Pizza_Tapped(object sender, EventArgs e)
         {
             switch (animState.CurrentState)

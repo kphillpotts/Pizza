@@ -54,7 +54,7 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="4.5.0.657" />
+    <PackageReference Include="Xamarin.Forms" Version="4.6.0.726" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.1" />
   </ItemGroup>
   <ItemGroup>
@@ -95,13 +95,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-      <AndroidResource Include="Resources\drawable-xxxhdpi\Pizza.png"/>
-      <AndroidResource Include="Resources\drawable-xxhdpi\Pizza.png"/>
-      <AndroidResource Include="Resources\drawable-xhdpi\Pizza.png"/>
-      <AndroidResource Include="Resources\drawable-hdpi\Pizza.png"/>
-      <AndroidResource Include="Resources\drawable-mdpi\Pizza.png"/>
-      <AndroidResource Include="Resources\drawable-ldpi\Pizza.png"/>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\Pizza.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\Pizza.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\Pizza.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\Pizza.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\Pizza.png" />
+    <AndroidResource Include="Resources\drawable-ldpi\Pizza.png" />
   </ItemGroup>
-
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

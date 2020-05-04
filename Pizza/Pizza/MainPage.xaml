@@ -123,7 +123,7 @@
         <StackLayout
             x:Name="PizzaDescription"
             Margin="20,0"
-            IsVisible="False"
+            IsVisible="True"
             Spacing="20"
             VerticalOptions="End">
             <StackLayout Orientation="Horizontal">
