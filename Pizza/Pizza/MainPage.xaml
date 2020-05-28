@@ -6,6 +6,7 @@
     xmlns:controls="clr-namespace:Pizza.Controls"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
     BackgroundColor="{StaticResource Background}"
     mc:Ignorable="d">
 
@@ -16,6 +17,16 @@
             <Color x:Key="PillColor">Gray</Color>
             <Color x:Key="PillTextColor">White</Color>
             <Color x:Key="BodyTextColor">White</Color>
+
+            <Style x:Key="AccentButton" TargetType="Button">
+                <Setter Property="CornerRadius" Value="30" />
+                <Setter Property="HorizontalOptions" Value="Fill" />
+                <Setter Property="Margin" Value="20,10" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="BackgroundColor" Value="{StaticResource AccentColor}" />
+                <Setter Property="HeightRequest" Value="60" />
+            </Style>
+
 
             <Style x:Key="QuantityButton" TargetType="Button">
                 <Setter Property="Padding" Value="0" />
@@ -53,6 +64,12 @@
                 <Setter Property="TextColor" Value="{StaticResource AccentColor}" />
                 <Setter Property="FontFamily" Value="SemiBold" />
                 <Setter Property="FontSize" Value="24" />
+            </Style>
+
+            <Style x:Key="ButtonTextStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource Background}" />
+                <Setter Property="FontFamily" Value="SemiBold" />
+                <Setter Property="FontSize" Value="16" />
             </Style>
 
 
@@ -104,6 +121,33 @@
                 Text="Small"
                 TextColor="White"
                 VerticalOptions="Start" />
+
+            <skia:SKCanvasView
+                x:Name="PizzaRuler"
+                HeightRequest="10"
+                PaintSurface="PizzaRuler_PaintSurface" />
+
+            <Grid x:Name="PizzaRulerThumb">
+                <BoxView
+                    BackgroundColor="{StaticResource AccentColor}"
+                    CornerRadius="15"
+                    HeightRequest="30"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    WidthRequest="30">
+                    <BoxView.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="PizzaRulerThumb_Tapped" />
+                    </BoxView.GestureRecognizers>
+                </BoxView>
+                <Label
+                    x:Name="PizzaThumbLabel"
+                    HorizontalOptions="Center"
+                    InputTransparent="True"
+                    Text="&gt;"
+                    TextColor="Black"
+                    VerticalOptions="Center" />
+
+            </Grid>
 
         </AbsoluteLayout>
 
@@ -195,28 +239,49 @@
                 x:Name="QuantityLabel"
                 Grid.Column="1"
                 HorizontalOptions="Center"
+                Text="1"
                 TextStyle="{StaticResource QuantityStyle}"
                 VerticalOptions="Center" />
-
-
-
-
-
-
 
         </Grid>
 
         <Button
             x:Name="AddToCartButton"
             Grid.Row="1"
-            Margin="20,10"
-            BackgroundColor="{StaticResource AccentColor}"
-            Clicked="Button_Clicked"
-            CornerRadius="30"
-            HeightRequest="60"
-            HorizontalOptions="Fill"
-            Text="Add to Cart"
-            VerticalOptions="Center" />
+            Clicked="AddToCartButton_Clicked"
+            Style="{StaticResource AccentButton}"
+            Text="Add to Cart" />
+
+        <Button
+            x:Name="PlaceOrderButton"
+            Grid.Row="1"
+            Clicked="PlaceOrderButton_Clicked"
+            Style="{StaticResource AccentButton}" />
+
+        <Grid
+            x:Name="PlaceOrder"
+            Grid.Row="1"
+            HorizontalOptions="Center"
+            VerticalOptions="Fill">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label
+                HorizontalOptions="Center"
+                Opacity=".6"
+                Style="{StaticResource ButtonTextStyle}"
+                Text="Place Order"
+                VerticalOptions="Center" />
+            <controls:FerrisLabel
+                x:Name="OrderTotal"
+                Grid.Column="1"
+                HeightRequest="80"
+                TextStyle="{StaticResource ButtonTextStyle}"
+                VerticalOptions="Center" />
+
+        </Grid>
 
 
     </Grid>
