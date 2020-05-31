@@ -150,4 +150,22 @@
       <Visible>False</Visible>
     </ImageAsset>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\backbutton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\backbutton%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\backbutton%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\basilleaf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\basilleaf%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\basilleaf%403x.png" />
+  </ItemGroup>
 </Project>

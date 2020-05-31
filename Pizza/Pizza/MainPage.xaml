@@ -72,6 +72,12 @@
                 <Setter Property="FontSize" Value="16" />
             </Style>
 
+            <Style x:Key="RatingLabel" TargetType="Label">
+                <Setter Property="FontFamily" Value="FAR" />
+                <Setter Property="TextColor" Value="{StaticResource AccentColor}" />
+            </Style>
+
+            <x:String x:Key="FAS-Star">&#xf005;</x:String>
 
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -83,6 +89,14 @@
             <RowDefinition Height="80" />
         </Grid.RowDefinitions>
 
+        <Image
+            x:Name="BasilLeaf"
+            HorizontalOptions="End"
+            Source="basilleaf"
+            TranslationX="100"
+            TranslationY="130"
+            VerticalOptions="Center" />
+
         <BoxView
             Grid.Row="1"
             Margin="20,10"
@@ -92,17 +106,12 @@
             HorizontalOptions="Fill"
             VerticalOptions="Center" />
 
-
         <AbsoluteLayout>
             <Image
                 x:Name="Pizza"
                 AbsoluteLayout.LayoutBounds="0,0,100,100"
                 AbsoluteLayout.LayoutFlags="None"
-                Source="Pizza">
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Pizza_Tapped" />
-                </Image.GestureRecognizers>
-            </Image>
+                Source="Pizza" />
 
             <Image
                 x:Name="FlyingPizza"
@@ -153,7 +162,7 @@
 
         <Label
             x:Name="PizzaTitle"
-            Margin="20"
+            Margin="20,40,0,0"
             AbsoluteLayout.LayoutBounds="0,0,0,0"
             AbsoluteLayout.LayoutFlags="None"
             FontFamily="Regular"
@@ -162,6 +171,20 @@
             Text="Pizza Margherita"
             TextColor="White"
             VerticalOptions="Start" />
+
+        <StackLayout
+            x:Name="RatingBar"
+            Margin="20,90,0,0"
+            HorizontalOptions="Start"
+            Orientation="Horizontal"
+            VerticalOptions="Start">
+
+            <Label Style="{StaticResource RatingLabel}" Text="{StaticResource FAS-Star}" />
+            <Label Style="{StaticResource RatingLabel}" Text="{StaticResource FAS-Star}" />
+            <Label Style="{StaticResource RatingLabel}" Text="{StaticResource FAS-Star}" />
+            <Label Style="{StaticResource RatingLabel}" Text="{StaticResource FAS-Star}" />
+            <Label Style="{StaticResource DescriptionText}" Text="82 votes" />
+        </StackLayout>
 
 
         <StackLayout
@@ -282,6 +305,17 @@
                 VerticalOptions="Center" />
 
         </Grid>
+
+        <Image
+            x:Name="BackButton"
+            Margin="10"
+            HorizontalOptions="Start"
+            Source="backbutton"
+            VerticalOptions="Start">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Tapped="BackButton_Tapped" />
+            </Image.GestureRecognizers>
+        </Image>
 
 
     </Grid>

@@ -98,6 +98,10 @@ namespace Pizza
                 new ViewTransition(PlaceOrderButton, AnimationType.Opacity,0),
                 new ViewTransition(AddToCartButton, AnimationType.Opacity, 1),
                 new ViewTransition(PlaceOrder, AnimationType.Opacity, 0),
+                new ViewTransition(BackButton, AnimationType.Opacity, 0),
+                new ViewTransition(RatingBar, AnimationType.Opacity, 0),
+                new ViewTransition(RatingBar, AnimationType.TranslationY, 90),
+                new ViewTransition(BasilLeaf, AnimationType.TranslationX, 200),
             });
 
             // entrance pizza position is calculated 
@@ -118,6 +122,10 @@ namespace Pizza
                 new ViewTransition(PlaceOrderButton, AnimationType.Opacity,0),
                 new ViewTransition(AddToCartButton, AnimationType.Opacity, 1),
                 new ViewTransition(PlaceOrder, AnimationType.Opacity, 0),
+                new ViewTransition(BackButton, AnimationType.Opacity, 0),
+                new ViewTransition(RatingBar, AnimationType.Opacity, 0),
+                new ViewTransition(RatingBar, AnimationType.TranslationY, 90),
+                new ViewTransition(BasilLeaf, AnimationType.TranslationX, 200),
             });
 
             // small 
@@ -125,7 +133,7 @@ namespace Pizza
 
             var pizzaImageSize = Width * .5;
             var smallRect = new Rectangle(20, yPos - (pizzaImageSize / 2), pizzaImageSize, pizzaImageSize);
-            var smallLabelRect = new Rectangle(smallRect.Left, smallRect.Bottom + 20, pizzaImageSize, SizeLabel.Height);
+            var smallLabelRect = new Rectangle(smallRect.Left, smallRect.Bottom + 10, pizzaImageSize, SizeLabel.Height);
 
             var rulerRect = new Rectangle(
                 x: smallRect.Left + (smallRect.Width / 2),
@@ -153,12 +161,17 @@ namespace Pizza
                 new ViewTransition(PlaceOrderButton, AnimationType.Opacity,1),
                 new ViewTransition(AddToCartButton, AnimationType.Opacity, 0),
                 new ViewTransition(PlaceOrder, AnimationType.Opacity, 1),
+                new ViewTransition(BackButton, AnimationType.Opacity, 1),
+                new ViewTransition(RatingBar, AnimationType.Opacity, 1),
+                new ViewTransition(RatingBar, AnimationType.TranslationY, 0),
+                new ViewTransition(BasilLeaf, AnimationType.TranslationX, 100),
+
             }); ;
 
             // medium 
             pizzaImageSize = Width * .7;
             var mediumRect = new Rectangle(20, yPos - (pizzaImageSize / 2), pizzaImageSize, pizzaImageSize);
-            var mediumLabelRect = new Rectangle(mediumRect.Left, mediumRect.Bottom + 20, pizzaImageSize, SizeLabel.Height);
+            var mediumLabelRect = new Rectangle(mediumRect.Left, mediumRect.Bottom + 10, pizzaImageSize, SizeLabel.Height);
             animState.Add(State.Medium, new ViewTransition[]
             {
                 new ViewTransition(Pizza, AnimationType.Layout, mediumRect),
@@ -179,12 +192,17 @@ namespace Pizza
                 new ViewTransition(PlaceOrderButton, AnimationType.Opacity,1),
                 new ViewTransition(AddToCartButton, AnimationType.Opacity, 0),
                 new ViewTransition(PlaceOrder, AnimationType.Opacity, 1),
+                new ViewTransition(BackButton, AnimationType.Opacity, 1),
+                new ViewTransition(RatingBar, AnimationType.Opacity, 1),
+                new ViewTransition(RatingBar, AnimationType.TranslationY, 0),
+                new ViewTransition(BasilLeaf, AnimationType.TranslationX, 100),
+
             });
 
             // large 
             pizzaImageSize = Width * .9;
             var largeRect = new Rectangle(20, yPos - (pizzaImageSize / 2), pizzaImageSize, pizzaImageSize);
-            var largeLabelRect = new Rectangle(largeRect.Left, largeRect.Bottom + 20, pizzaImageSize, SizeLabel.Height);
+            var largeLabelRect = new Rectangle(largeRect.Left, largeRect.Bottom + 10, pizzaImageSize, SizeLabel.Height);
             animState.Add(State.Large, new ViewTransition[]
             {
                 new ViewTransition(Pizza, AnimationType.Layout, largeRect),
@@ -205,6 +223,10 @@ namespace Pizza
                 new ViewTransition(PlaceOrderButton, AnimationType.Opacity,1),
                 new ViewTransition(AddToCartButton, AnimationType.Opacity, 0),
                 new ViewTransition(PlaceOrder, AnimationType.Opacity, 1),
+                new ViewTransition(BackButton, AnimationType.Opacity, 1),
+                new ViewTransition(RatingBar, AnimationType.Opacity, 1),
+                new ViewTransition(RatingBar, AnimationType.TranslationY, 0),
+                new ViewTransition(BasilLeaf, AnimationType.TranslationX, 100),
             });
         }
 
@@ -218,31 +240,31 @@ namespace Pizza
                 
         }
 
-        private void Pizza_Tapped(object sender, EventArgs e)
-        {
-            switch (animState.CurrentState)
-            {
-                case State.Start:
-                    animState.Go(State.Entrance);
-                    break;
-                case State.Entrance:
-                    SizeLabel.Text = "Small";
-                    animState.Go(State.Small);
-                    break;
-                case State.Small:
-                    SizeLabel.Text = "Medium";
-                    animState.Go(State.Medium);
-                    break;
-                case State.Medium:
-                    SizeLabel.Text = "Large";
-                    animState.Go(State.Large);
-                    break;
-                case State.Large:
-                    animState.Go(State.Start);
-                    break;
+        //private void Pizza_Tapped(object sender, EventArgs e)
+        //{
+        //    switch (animState.CurrentState)
+        //    {
+        //        case State.Start:
+        //            animState.Go(State.Entrance);
+        //            break;
+        //        case State.Entrance:
+        //            SizeLabel.Text = "Small";
+        //            animState.Go(State.Small);
+        //            break;
+        //        case State.Small:
+        //            SizeLabel.Text = "Medium";
+        //            animState.Go(State.Medium);
+        //            break;
+        //        case State.Medium:
+        //            SizeLabel.Text = "Large";
+        //            animState.Go(State.Large);
+        //            break;
+        //        case State.Large:
+        //            animState.Go(State.Start);
+        //            break;
 
-            }
-        }
+        //    }
+        //}
 
         private void AddToCartButton_Clicked(object sender, EventArgs e)
         {
@@ -253,8 +275,14 @@ namespace Pizza
 
         private async Task PizzaFly()
         {
+            // check if the pizza is already flying
+            if (FlyingPizza.IsVisible) return;
+
             // eat the pizza
             FlyingPizza.IsVisible = true;
+
+            // position pizza at the bottom
+            AbsoluteLayout.SetLayoutBounds(FlyingPizza, Pizza.Bounds);
 
             var buttonBounds = PlaceOrderButton.Bounds;
 
@@ -280,15 +308,62 @@ namespace Pizza
             FlyingPizza.IsVisible = false;
         }
 
+
+        private async Task RegurgitatePizza()
+        {
+            // check if the pizza is already flying
+            if (FlyingPizza.IsVisible) return;
+
+
+            var buttonBounds = PlaceOrderButton.Bounds;
+
+            // work out where it needs to fly from?
+            var size = new Size(buttonBounds.Height, buttonBounds.Height);
+            var location = new Point(buttonBounds.Right - size.Width, buttonBounds.Top);
+            var chompBounds = new Rectangle(location, size);
+
+            // position pizza at the bottom
+            AbsoluteLayout.SetLayoutBounds(FlyingPizza, chompBounds);
+
+            // eat the pizza
+            FlyingPizza.IsVisible = true;
+
+            _ = FlyingPizza.RelRotateTo(90, 500, Easing.SinInOut);
+
+            // open the button
+            var buttonChompBounds = new Rectangle(PlaceOrderButton.Bounds.Location,
+                new Size(PlaceOrderButton.Width - buttonBounds.Height, buttonBounds.Height));
+            await PlaceOrderButton.LayoutTo(buttonChompBounds, 500, Easing.SinInOut);
+
+
+            // work out where it needs to fly to - pizza is
+            var destRect = Pizza.Bounds;
+
+            // animate the pizza up
+            _ = FlyingPizza.LayoutTo(destRect, 500, Easing.SinInOut);
+            _ = FlyingPizza.RotateTo(Pizza.Rotation, 500, Easing.SinInOut);
+
+            // close the button chomp
+            await PlaceOrderButton.LayoutTo(buttonBounds, 500, Easing.SinInOut);
+
+            FlyingPizza.IsVisible = false;
+        }
+
+
+
         int currentQuantity = 1;
 
         private async void DecreaseButton_Clicked(object sender, EventArgs e)
         {
-            currentQuantity--;
+            if (currentQuantity == 1)
+                return;
+            else
+                currentQuantity--;
+
             QuantityLabel.AnimationOffset = new Point(0, -20);
             QuantityLabel.Text = currentQuantity.ToString();
             UpdatePrice(currentQuantity);
-            await PizzaFly();
+            await RegurgitatePizza();
 
         }
 
@@ -345,12 +420,15 @@ namespace Pizza
             switch (animState.CurrentState)
             {
                 case State.Small:
+                    SizeLabel.Text = "Medium";
                     animState.Go(State.Medium);
                     break;
                 case State.Medium:
+                    SizeLabel.Text = "Large";
                     animState.Go(State.Large);
                     break;
                 case State.Large:
+                    SizeLabel.Text = "Small";
                     animState.Go(State.Small);
                     break;
             }
@@ -359,6 +437,11 @@ namespace Pizza
         private void PlaceOrderButton_Clicked(object sender, EventArgs e)
         {
 
+        }
+
+        private void BackButton_Tapped(object sender, EventArgs e)
+        {
+            animState.Go(State.Entrance);
         }
     }
 }
